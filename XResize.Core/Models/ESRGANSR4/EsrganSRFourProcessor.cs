@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 using SkiaSharp;
-using System.Drawing;
 using XResize.Models;
 
 namespace ImResizer.Models.ESRGANSR4
@@ -46,9 +45,9 @@ namespace ImResizer.Models.ESRGANSR4
             }
         }
 
-        private protected override void ImageToSmallImages(int numberElementByHeight, int numberElementByWidth, ref SKBitmap  image, out SKBitmap [][] bitmaps)
+        protected override void ImageToSmallImages(int numberElementByHeight, int numberElementByWidth, ref SKBitmap image, out SKBitmap[][] bitmaps)
         {
-            bitmaps = new SKBitmap [numberElementByHeight][];
+            bitmaps = new SKBitmap[numberElementByHeight][];
 
             int arrayCoef = 0;
             if (numberElementByHeight == numberElementByWidth ||
@@ -59,16 +58,15 @@ namespace ImResizer.Models.ESRGANSR4
 
             for (int height = 0; height < bitmaps.Length; height++)
             {
-                bitmaps[height] = new SKBitmap [numberElementByWidth];
+                bitmaps[height] = new SKBitmap[numberElementByWidth];
                 for (int width = 0; width < bitmaps[height].Length; width++)
-                    bitmaps[height][width] = new SKBitmap (InputWidth, InputHeight);
+                    bitmaps[height][width] = new SKBitmap(InputWidth, InputHeight);
             }
 
             for (var w = 0; w < image.Width; w++)
             {
                 for (var h = 0; h < image.Height; h++)
                 {
-
                     var currentH = h == 0 ? 0 : h;
                     var currentW = w == 0 ? 0 : w;
 
@@ -79,12 +77,11 @@ namespace ImResizer.Models.ESRGANSR4
                     var elementHeightNumber = (int)(currentH / InputHeightF);
 
                     bitmaps[elementHeightNumber][elementWidthNumber].SetPixel(currentElementPixelW, currentElementPixelH, image.GetPixel(w, h));
-
                 }
             }
         }
 
-        private protected override SKBitmap  ImagesToFullImage(in SKBitmap [][] bitmaps, int width, int height)
+        protected override SKBitmap ImagesToFullImage(in SKBitmap[][] bitmaps, int width, int height)
         {
             //количество блоков по высоте и ширине
             int numberElementByWidth = 0;
@@ -110,9 +107,9 @@ namespace ImResizer.Models.ESRGANSR4
             else
                 numberElementByHeight = (height / OutputHeight);
 
-            var result = new SKBitmap (width, height);
+            var result = new SKBitmap(width, height);
 
-            for (int h = 0; h < bitmaps.Length; h++)            
+            for (int h = 0; h < bitmaps.Length; h++)
                 for (int w = 0; w < bitmaps[h].Length; w++)
                 {
                     var currentBitmap = bitmaps[h][w];
@@ -120,23 +117,23 @@ namespace ImResizer.Models.ESRGANSR4
                     var bitmapWidth = wHasEmptyBlock && w + 1 == numberElementByWidth ? width - (numberElementByWidth - 1) * OutputWidth : currentBitmap.Width;
                     var bitmapHeight = hHasEmptyBlock && h + 1 == numberElementByHeight ? height - (numberElementByHeight - 1) * OutputHeight : currentBitmap.Height;
 
-                    for (var bitmapW = 0; bitmapW < bitmapWidth; bitmapW++)                    
-                        for (var bitmapH = 0; bitmapH < bitmapHeight; bitmapH++)                        
+                    for (var bitmapW = 0; bitmapW < bitmapWidth; bitmapW++)
+                        for (var bitmapH = 0; bitmapH < bitmapHeight; bitmapH++)
                             result.SetPixel((w * OutputWidth) + bitmapW,
                                             (h * OutputHeight) + bitmapH,
-                                            currentBitmap.GetPixel(bitmapW, bitmapH));                                         
-                }            
+                                            currentBitmap.GetPixel(bitmapW, bitmapH));
+                }
             return result;
         }
 
-        private protected override SKBitmap  Resizer(ref SKBitmap  bitmap, ref InferenceSession session)
+        protected override SKBitmap Resizer(ref SKBitmap bitmap, ref InferenceSession session)
         {
             var pixels = new int[InputArraySize];
 
             Tensor<float> input = new DenseTensor<float>(new[] { 1, CountChannels, InputWidth, InputHeight });
             Tensor<float> output = new DenseTensor<float>(new[] { 1, CountChannels, OutputWidth, OutputHeight });
 
-            for (var i = 0; i < bitmap.Width; i++)            
+            for (var i = 0; i < bitmap.Width; i++)
                 for (var j = 0; j < bitmap.Height; j++)
                 {
                     var colr = bitmap.GetPixel(i, j);
@@ -144,26 +141,21 @@ namespace ImResizer.Models.ESRGANSR4
                     input[0, 0, j, i] = ((float)(colr.Blue) / (float)255.0);
                     input[0, 1, j, i] = ((float)(colr.Green) / (float)255.0);
                     input[0, 2, j, i] = ((float)(colr.Red) / (float)255.0);
-
                 }
-            
 
             var inputs = new List<NamedOnnxValue> { NamedOnnxValue.CreateFromTensor("input.1", input) };
-
 
             var results = session.Run(inputs) as List<DisposableNamedOnnxValue>;
             var bytes = results.First().AsEnumerable<float>().ToArray();
 
             return SaveAsFile(ref bytes);
-
         }
 
-        private protected override SKBitmap  SaveAsFile(ref float[] bufer)
+        protected override SKBitmap SaveAsFile(ref float[] bufer)
         {
             List<SKColor> color = new List<SKColor>();
             for (int i = 0; i < OutputArraySize; i += 1)
             {
-
                 int b = (int)Math.Round((bufer[i] * (float)255.0), MidpointRounding.AwayFromZero);
                 int g = (int)Math.Round((bufer[i + OutputArraySize * 1] * (float)255.0), MidpointRounding.AwayFromZero);
                 int r = (int)Math.Round((bufer[i + OutputArraySize * 2] * (float)255.0), MidpointRounding.AwayFromZero);
@@ -171,7 +163,7 @@ namespace ImResizer.Models.ESRGANSR4
                 color.Add(new SKColor((byte)(r > 255 ? 255 : r < 0 ? 0 : r), (byte)(g > 255 ? 255 : g < 0 ? 0 : g), (byte)(b > 255 ? 255 : b < 0 ? 0 : b)));
             }
 
-            var result = new SKBitmap (OutputWidth, OutputHeight);
+            var result = new SKBitmap(OutputWidth, OutputHeight);
 
             int colorNum = 0;
             for (int x = 0; x < OutputHeight; x++)
@@ -184,11 +176,11 @@ namespace ImResizer.Models.ESRGANSR4
             return result;
         }
 
-        public override async Task<SKBitmap ?> Resize(SKBitmap  image)
+        public override async Task<SKBitmap?> Resize(SKBitmap image)
         {
             if (IsResize)
                 throw new Exception();
-            SKBitmap ? result = null;
+            SKBitmap? result = null;
 
             try
             {
@@ -199,26 +191,25 @@ namespace ImResizer.Models.ESRGANSR4
                 int numberElementByWidth = (image.Width % InputWidth) > 0 ? (image.Width / InputWidth + 1) : (image.Width / InputWidth);
                 int numberElementByHeight = (image.Height % InputHeight) > 0 ? (image.Height / InputHeight + 1) : (image.Height / InputHeight);
 
-                ImageToSmallImages(numberElementByHeight, numberElementByWidth, ref image, out SKBitmap [][] elements);
+                ImageToSmallImages(numberElementByHeight, numberElementByWidth, ref image, out SKBitmap[][] elements);
 
-                var resizedBitmaps = new SKBitmap [numberElementByHeight][];
+                var resizedBitmaps = new SKBitmap[numberElementByHeight][];
 
                 for (int height = 0; height < numberElementByHeight; height++)
-                    resizedBitmaps[height] = new SKBitmap [numberElementByWidth];
+                    resizedBitmaps[height] = new SKBitmap[numberElementByWidth];
 
                 //h,w
                 var threads = new List<(int, int)>[_maxTaskCount].Select(x => new List<(int, int)>()).ToArray();
 
                 int lastThreadIndex = _maxTaskCount - 1;
 
-                for (int imageHeightNumber = 0, threadsNumber = 0; imageHeightNumber < elements.Length; imageHeightNumber++)                
+                for (int imageHeightNumber = 0, threadsNumber = 0; imageHeightNumber < elements.Length; imageHeightNumber++)
                     for (int imageWidthNumber = 0; imageWidthNumber < elements[imageHeightNumber].Length; imageWidthNumber++)
                     {
                         threads[threadsNumber].Add((imageHeightNumber, imageWidthNumber));
 
                         threadsNumber = threadsNumber == lastThreadIndex ? 0 : threadsNumber + 1;
                     }
-                
 
                 List<Task> tasks = new List<Task>();
 
@@ -228,9 +219,8 @@ namespace ImResizer.Models.ESRGANSR4
 
                     tasks.Add(Task.Run(() =>
                     {
-                        foreach (var item in threads[currentIterationIndex])                        
-                            resizedBitmaps[item.Item1][item.Item2] = Resizer(ref elements[item.Item1][item.Item2], ref _models[currentIterationIndex]);                       
-
+                        foreach (var item in threads[currentIterationIndex])
+                            resizedBitmaps[item.Item1][item.Item2] = Resizer(ref elements[item.Item1][item.Item2], ref _models[currentIterationIndex]);
                     }));
                 }
 
@@ -247,7 +237,6 @@ namespace ImResizer.Models.ESRGANSR4
                 _logger.LogError(ex, "Exception in Resize");
             }
             return result;
-
         }
 
         /// <summary>
@@ -255,6 +244,6 @@ namespace ImResizer.Models.ESRGANSR4
         /// </summary>
         /// <returns></returns>
         public IResizer Clone() =>
-            new EsrganSRFourProcessor(this.ModelPath, this._maxTaskCount, _logger);        
+            new EsrganSRFourProcessor(this.ModelPath, this._maxTaskCount, _logger);
     }
 }

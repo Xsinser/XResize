@@ -1,5 +1,4 @@
 ﻿using SkiaSharp;
-using System.Drawing;
 
 namespace ImResizer.Interfaces
 {
@@ -7,7 +6,8 @@ namespace ImResizer.Interfaces
     {
         bool IsResize { get; set; }
 
-        Task<SKBitmap?> Resize(SKBitmap  image);
+        Task<SKBitmap?> Resize(SKBitmap image);
+
         IResizer Clone();
     }
 }
