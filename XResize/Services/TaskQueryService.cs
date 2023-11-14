@@ -12,7 +12,10 @@ using System.Threading.Tasks;
 using System.Threading;
 
 namespace XResize.Bot.Services
-{
+{    
+    /// <summary>
+    /// Single
+    /// </summary>
     public class TaskQueryService
     {
         private readonly SynchronizedCollection<BotTaskModel>  _taskQuery = new();

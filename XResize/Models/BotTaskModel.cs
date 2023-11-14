@@ -18,5 +18,17 @@ namespace XResize.Bot.Models
         public bool IsComplited { get; set; }
         public bool IsSended { get; set; }
         public bool IsInProgress { get; set; }
+
+        public BotTaskModel(BotTypeEnum botTypeEnum, string username, string userId, SKBitmap userImage)
+        {
+            Type = botTypeEnum;
+            UserName = username;
+            UserId = userId;
+            UserImage = userImage;
+            Result = null;
+            IsComplited = false;
+            IsSended = false;
+            IsInProgress = false;
+        }
     }
 }
