@@ -11,7 +11,12 @@ public class Program
         var host = Host.CreateDefaultBuilder().ConfigureServices(services =>
         {
             services.AddLogging();
-            services.AddHostedService<TelegramService>();
+            services.AddSingleton<TaskQueryService, TaskQueryService>();
+            services.AddSingleton<BotService, BotService>();
+            services.AddHostedService<TelegramService>();            
+			services.AddHostedService<CleanerService>();            
+			services.AddHostedService<CallbackService >();
+			services.AddHostedService<WorkerService >();            
         }).Build();
 
         await host.RunAsync();
