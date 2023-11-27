@@ -13,7 +13,7 @@ using Telegram.Bot;
 
 namespace XResize.Bot.HostedServices
 {
-    public abstract class BaseService : IHostedService, IDisposable
+    public abstract class BaseService : IDisposable
     {
         private Task _executingTask;
         protected readonly ILogger _logger;

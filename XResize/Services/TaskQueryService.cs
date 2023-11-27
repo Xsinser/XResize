@@ -4,21 +4,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XResize.Bot.Models;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
+using XResize.Bot.Models.Work;
 
 namespace XResize.Bot.Services
-{    
+{
     /// <summary>
     /// Single
     /// </summary>
     public class TaskQueryService
     {
-        private readonly SynchronizedCollection<BotTaskModel>  _taskQuery = new();
+        private readonly SynchronizedCollection<Job> _taskQuery = new();
         private readonly object _locker = new ();
 
         public TaskQueryService()
@@ -26,7 +26,7 @@ namespace XResize.Bot.Services
 
         }
 
-        public void AddNewTask(BotTaskModel task)
+        public void AddNewTask(Job task)
         {
             lock (_locker)
             {
@@ -34,7 +34,7 @@ namespace XResize.Bot.Services
             }
         }
 
-        public bool TryGetUncomplitedTask(out BotTaskModel botTask)
+        public bool TryGetUncomplitedTask(out Job botTask)
         {
             lock (_locker)
             {
@@ -51,7 +51,7 @@ namespace XResize.Bot.Services
         {
             lock (_locker)
             {
-                foreach (BotTaskModel task in _taskQuery.Where(x=>x.IsSended))
+                foreach (var task in _taskQuery.Where(x=>x.IsSended))
                     _taskQuery.Remove(task);
             }
         }

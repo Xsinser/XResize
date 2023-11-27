@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,13 @@ namespace XResize.Bot.Services
         {
             ReplyKeyboardMarkup replyKeyboard = new(new[] { new KeyboardButton[] { "Бенчмаркинг", "Мои задачи" } }) { ResizeKeyboard = true };
             await _client.SendTextMessageAsync(chatId, messageText, replyMarkup: replyKeyboard, cancellationToken: cancellationToken);
+        }
+
+        public async Task<SKBitmap> GetDocument(string fileId)
+        {
+            await using var stream = new MemoryStream();
+            await _client.DownloadFileAsync(fileId, stream);
+            return SKBitmap.Decode(stream);
         }
     }
 }

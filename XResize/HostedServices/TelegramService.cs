@@ -5,11 +5,12 @@ using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using XResize.Bot.Models.Work;
 using XResize.Bot.Services;
 
 namespace XResize.Bot.HostedServices
 {
-    public class TelegramService : BaseService
+    public class TelegramService : BaseService, IHostedService
     {
         private readonly BotService _botService;
         private readonly TaskQueryService _taskQueryService;
@@ -42,7 +43,7 @@ namespace XResize.Bot.HostedServices
             if (update.Message is not { } message)
                 return;
             // Only process text messages
-            if (message.Text is not "")
+            if (string.IsNullOrEmpty(message.Text))
             {
 
                 var chatId = message.Chat.Id;
@@ -67,7 +68,14 @@ namespace XResize.Bot.HostedServices
             }
             else
             {
-                _taskQueryService.AddNewTask(new(Enums.BotTypeEnum.Telegram, message.From.Username, message.Chat.Id.ToString(), new()));
+                _taskQueryService.AddNewTask(new DocumentJob(_botService, 
+                    _taskQueryService, 
+                    message.Document.
+                    FileId, 
+                    message.Document.FileName,
+                    message.Document.MimeType,
+                    message.From.Username, 
+                    message.Chat.Id.ToString()));
             }
         }
 

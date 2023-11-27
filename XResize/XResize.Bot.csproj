@@ -18,4 +18,12 @@
     <PackageReference Include="Telegram.Bot" Version="19.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interface\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XResize.Core\XResize.Core.csproj" />
+  </ItemGroup>
+
 </Project>
