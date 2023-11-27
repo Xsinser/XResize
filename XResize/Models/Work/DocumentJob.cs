@@ -43,7 +43,7 @@ namespace XResize.Bot.Models.Work
         public override async Task Execute(SystemInfoService systemInfo)
         {
             var document = await BotService.GetDocument(FileId);
-            TaskQueryService.AddNewTask(new ResizeJob(Enums.BotTypeEnum.Telegram, UserName, UserId, document));
+            TaskQueryService.AddNewTask(new ResizeJob(BotService, Enums.BotTypeEnum.Telegram, UserName, UserId, document));
         }
     }
 }

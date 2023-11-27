@@ -35,6 +35,11 @@ namespace XResize.Bot.Services
             await _client.SendTextMessageAsync(chatId, messageText, replyMarkup: replyKeyboard, cancellationToken: cancellationToken);
         }
 
+        public async Task SendDocument(ChatId chatId, Stream documentStream)
+        {
+            await _client.SendDocumentAsync(chatId, InputFile.FromStream(documentStream));
+        }
+
         public async Task<SKBitmap> GetDocument(string fileId)
         {
             await using var stream = new MemoryStream();
