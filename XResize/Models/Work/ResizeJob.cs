@@ -17,6 +17,7 @@ namespace XResize.Bot.Models.Work
         public string UserId { get; set; }
         public SKBitmap UserImage { get; set; }
         public BotService BotService { get; private set; }
+
         public ResizeJob(BotService botService, BotTypeEnum botTypeEnum, string username, string userId, SKBitmap userImage)
         {
             BotService = botService;

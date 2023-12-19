@@ -14,6 +14,7 @@ namespace XResize.Bot.HostedServices
     {
         protected readonly TaskQueryService _taskQueryService;
         protected readonly SystemInfoService _systemInfoService;
+
         public WorkerService(ILogger<WorkerService> logger, SystemInfoService systemInfoService, TaskQueryService taskQueryService) : base(logger)
         {
             _taskQueryService = taskQueryService;

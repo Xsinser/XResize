@@ -13,6 +13,8 @@ namespace XResize.Bot.Services
     {
         private readonly ILogger _logger;
 
+        public TimeOnly BenchmarkingTime { get; set; }
+
         public IResizer Resizer { get; private set; }
 
         public SystemInfoService(ILogger<SystemInfoService> logger)
