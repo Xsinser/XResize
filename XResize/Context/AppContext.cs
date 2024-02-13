@@ -6,10 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XResize.Bot.Services;
 
-namespace XResize.Bot.Services
+namespace XResize.Bot.Context
 {
-    public class SystemInfoService
+    public class ApplicationContext
     {
         private readonly ILogger _logger;
 
@@ -17,9 +18,9 @@ namespace XResize.Bot.Services
 
         public IResizer Resizer { get; private set; }
 
-        public SystemInfoService(ILogger<SystemInfoService> logger)
+        public ApplicationContext(ILogger<ApplicationContext> logger)
         {
-            _logger = logger; 
+            _logger = logger;
             Resizer = new EsrganSRFourProcessor("", 1, logger);
         }
     }

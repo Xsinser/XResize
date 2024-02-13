@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XResize.Bot.Context;
 using XResize.Bot.Services;
 
 namespace XResize.Bot.Models.Work
@@ -18,20 +19,20 @@ namespace XResize.Bot.Models.Work
             BotService = botService;
         }
 
-        public override async Task Execute(SystemInfoService systemInfo)
+        public override async Task Execute(ApplicationContext appContext)
         {
-            if (systemInfo.BenchmarkingTime == null)
+            if (appContext.BenchmarkingTime == null)
             {
                 var stopwatch = new Stopwatch();
 
                 stopwatch.Start();
 
-                var result = await systemInfo.Resizer.Resize(UserImage);
+                var result = await appContext.Resizer.Resize(UserImage);
                 var stream = SKImage.FromPixels(result.PeekPixels()).Encode().AsStream();
 
                 stopwatch.Stop();
 
-                systemInfo.BenchmarkingTime = new TimeOnly(stopwatch.ElapsedTicks);
+                appContext.BenchmarkingTime = new TimeOnly(stopwatch.ElapsedTicks);
             }
 
             await BotService.SendMessage();

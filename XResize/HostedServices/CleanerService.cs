@@ -11,8 +11,8 @@ namespace XResize.Bot.HostedServices
 {
     public class CleanerService : BaseService, IHostedService
     {
-        protected readonly TaskQueryService _taskQueryService;
-        public CleanerService(ILogger<CleanerService> logger, TaskQueryService taskQueryService) : base(logger)
+        protected readonly TaskQueueService _taskQueryService;
+        public CleanerService(ILogger<CleanerService> logger, TaskQueueService taskQueryService) : base(logger)
         {
             _taskQueryService = taskQueryService;
         }

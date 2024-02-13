@@ -8,14 +8,6 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="XResize.Bot.HostedServices.CallbackService" Collapsed="true">
-    <Position X="12.25" Y="2" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
-      <FileName>HostedServices\CallbackService.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
   <Class Name="XResize.Bot.HostedServices.CleanerService" Collapsed="true">
     <Position X="5.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
@@ -35,7 +27,7 @@
   <Class Name="XResize.Bot.HostedServices.WorkerService" Collapsed="true">
     <Position X="4.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAEA=</HashCode>
       <FileName>HostedServices\WorkerService.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -43,7 +35,7 @@
   <Class Name="XResize.Bot.Models.Work.BenchmarkingJob" Collapsed="true">
     <Position X="17" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
       <FileName>Models\Work\BenchmarkingJob.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -64,29 +56,22 @@
   <Class Name="XResize.Bot.Models.Work.ResizeJob" Collapsed="true">
     <Position X="14.5" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAABAAAAAAQAAAAAAAwAAAAAAAAAAQAACAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAgAAAAAAAAAIQAACAAAAAA=</HashCode>
       <FileName>Models\Work\ResizeJob.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="XResize.Bot.Services.BotService" Collapsed="true">
     <Position X="7" Y="5.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAEAAACAAAAAAIAAAAAAAAAgAAABAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAEAAACACAAAAIAAAAAAAAAgAAABAAAA=</HashCode>
       <FileName>Services\BotService.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="XResize.Bot.Services.SystemInfoService" Collapsed="true">
-    <Position X="9.25" Y="5.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Services\SystemInfoService.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="XResize.Bot.Services.TaskQueryService" Collapsed="true">
+  <Class Name="XResize.Bot.Services.TaskQueueService" Collapsed="true">
     <Position X="4.75" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAIAAAgAAAAABAAACAAAAQAAAAAAAAA=</HashCode>
-      <FileName>Services\TaskQueryService.cs</FileName>
+      <FileName>Services\TaskQueueService.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

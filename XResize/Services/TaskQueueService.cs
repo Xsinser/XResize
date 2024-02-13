@@ -16,12 +16,12 @@ namespace XResize.Bot.Services
     /// <summary>
     /// Single
     /// </summary>
-    public class TaskQueryService
+    public class TaskQueueService
     {
         private readonly SynchronizedCollection<Job> _taskQuery = new();
-        private readonly object _locker = new ();
+        private readonly object _locker = new();
 
-        public TaskQueryService()
+        public TaskQueueService()
         {
 
         }
@@ -38,11 +38,11 @@ namespace XResize.Bot.Services
         {
             lock (_locker)
             {
-                botTask = _taskQuery.FirstOrDefault(x=>!x.IsInProgress && !x.IsSended && !x.IsComplited);
-                if(botTask == null)
+                botTask = _taskQuery.FirstOrDefault(x => x.JobState == Enums.JobStateEnum.InQueue);
+                if (botTask == null)
                     return false;
 
-                botTask.IsInProgress = true;
+                botTask.JobState = Enums.JobStateEnum.InProgress;
                 return true;
             }
         }
@@ -51,7 +51,7 @@ namespace XResize.Bot.Services
         {
             lock (_locker)
             {
-                foreach (var task in _taskQuery.Where(x=>x.IsSended))
+                foreach (var task in _taskQuery.Where(x => x.JobState == Enums.JobStateEnum.Complited))
                     _taskQuery.Remove(task);
             }
         }

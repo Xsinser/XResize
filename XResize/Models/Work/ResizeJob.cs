@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XResize.Bot.Context;
 using XResize.Bot.Enums;
 using XResize.Bot.Services;
 
@@ -25,14 +26,12 @@ namespace XResize.Bot.Models.Work
             UserName = username;
             UserId = userId;
             UserImage = userImage;
-            IsComplited = false;
-            IsSended = false;
-            IsInProgress = false;
+            JobState = JobStateEnum.InQueue;
         }
 
-        public override async Task Execute(SystemInfoService systemInfo)
+        public override async Task Execute(ApplicationContext appContext)
         {
-            var result = await systemInfo.Resizer.Resize(UserImage);
+            var result = await appContext.Resizer.Resize(UserImage);
             var stream = SKImage.FromPixels(result.PeekPixels()).Encode().AsStream();
             await BotService.SendDocument(UserId, stream);
         }

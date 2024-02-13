@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XResize.Bot.Context;
 using XResize.Bot.Models.Work;
 using XResize.Bot.Services;
 
@@ -12,13 +13,13 @@ namespace XResize.Bot.HostedServices
 {
     public class WorkerService : BaseService, IHostedService
     {
-        protected readonly TaskQueryService _taskQueryService;
-        protected readonly SystemInfoService _systemInfoService;
+        protected readonly TaskQueueService _taskQueryService;
+        protected readonly ApplicationContext _appContext;
 
-        public WorkerService(ILogger<WorkerService> logger, SystemInfoService systemInfoService, TaskQueryService taskQueryService) : base(logger)
+        public WorkerService(ILogger<WorkerService> logger, ApplicationContext appContext, TaskQueueService taskQueryService) : base(logger)
         {
             _taskQueryService = taskQueryService;
-            _systemInfoService = systemInfoService;
+            _appContext = appContext;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -28,7 +29,7 @@ namespace XResize.Bot.HostedServices
                 var result = _taskQueryService.TryGetUncomplitedTask(out var task);
 
                 if(result)
-                    await task.Execute(_systemInfoService);
+                    await task.Execute(_appContext);
                 await Task.Delay(1000);
             }
         }

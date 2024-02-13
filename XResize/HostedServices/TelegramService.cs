@@ -13,9 +13,9 @@ namespace XResize.Bot.HostedServices
     public class TelegramService : BaseService, IHostedService
     {
         private readonly BotService _botService;
-        private readonly TaskQueryService _taskQueryService;
+        private readonly TaskQueueService _taskQueryService;
 
-        public TelegramService(ILogger<TelegramService> logger, BotService botService, TaskQueryService taskQueryService) : base(logger)
+        public TelegramService(ILogger<TelegramService> logger, BotService botService, TaskQueueService taskQueryService) : base(logger)
         {
             _botService = botService;
             _taskQueryService = taskQueryService;
