@@ -1,7 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using XResize.Bot.Context;
+using XResize.Bot.HostedService;
 using XResize.Bot.HostedServices;
+using XResize.Bot.Interface;
+using XResize.Bot.Service;
 using XResize.Bot.Services;
 
 namespace XResize;
@@ -16,9 +19,11 @@ public class Program
             services.AddSingleton<TaskQueueService, TaskQueueService>();
             services.AddSingleton<ApplicationContext, ApplicationContext>();
             services.AddSingleton<BotService, BotService>();
-            services.AddHostedService<TelegramService>();
             services.AddHostedService<CleanerService>();
-            services.AddHostedService<WorkerService>();
+            services.AddHostedService<WorkerService<ISlowJob>>();
+            services.AddHostedService<WorkerService<INormalJob>>();
+            services.AddHostedService<WorkerService<IFastJob>>();
+            services.AddHostedService<TelegramService>();
         }).Build();
 
         await host.RunAsync();

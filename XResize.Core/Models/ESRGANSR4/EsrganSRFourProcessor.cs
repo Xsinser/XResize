@@ -45,7 +45,7 @@ namespace ImResizer.Models.ESRGANSR4
             }
         }
 
-        protected override void ImageToSmallImages(int numberElementByHeight, int numberElementByWidth, ref SKBitmap image, out SKBitmap[][] bitmaps)
+        protected override void ImageToSmallImages(int numberElementByHeight, int numberElementByWidth, SKBitmap image, out SKBitmap[][] bitmaps)
         {
             bitmaps = new SKBitmap[numberElementByHeight][];
 
@@ -126,7 +126,7 @@ namespace ImResizer.Models.ESRGANSR4
             return result;
         }
 
-        protected override SKBitmap Resizer(ref SKBitmap bitmap, ref InferenceSession session)
+        protected override SKBitmap Resizer(SKBitmap bitmap, InferenceSession session)
         {
             var pixels = new int[InputArraySize];
 
@@ -148,10 +148,10 @@ namespace ImResizer.Models.ESRGANSR4
             var results = session.Run(inputs) as List<DisposableNamedOnnxValue>;
             var bytes = results.First().AsEnumerable<float>().ToArray();
 
-            return SaveAsFile(ref bytes);
+            return SaveAsFile(bytes);
         }
 
-        protected override SKBitmap SaveAsFile(ref float[] bufer)
+        protected override SKBitmap SaveAsFile(float[] bufer)
         {
             List<SKColor> color = new List<SKColor>();
             for (int i = 0; i < OutputArraySize; i += 1)
@@ -191,7 +191,7 @@ namespace ImResizer.Models.ESRGANSR4
                 int numberElementByWidth = (image.Width % InputWidth) > 0 ? (image.Width / InputWidth + 1) : (image.Width / InputWidth);
                 int numberElementByHeight = (image.Height % InputHeight) > 0 ? (image.Height / InputHeight + 1) : (image.Height / InputHeight);
 
-                ImageToSmallImages(numberElementByHeight, numberElementByWidth, ref image, out SKBitmap[][] elements);
+                ImageToSmallImages(numberElementByHeight, numberElementByWidth, image, out SKBitmap[][] elements);
 
                 var resizedBitmaps = new SKBitmap[numberElementByHeight][];
 
@@ -220,7 +220,7 @@ namespace ImResizer.Models.ESRGANSR4
                     tasks.Add(Task.Run(() =>
                     {
                         foreach (var item in threads[currentIterationIndex])
-                            resizedBitmaps[item.Item1][item.Item2] = Resizer(ref elements[item.Item1][item.Item2], ref _models[currentIterationIndex]);
+                            resizedBitmaps[item.Item1][item.Item2] = Resizer(elements[item.Item1][item.Item2], _models[currentIterationIndex]);
                     }));
                 }
 

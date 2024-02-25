@@ -14,14 +14,23 @@ namespace XResize.Bot.Context
     {
         private readonly ILogger _logger;
 
-        public TimeOnly BenchmarkingTime { get; set; }
+        public TimeOnly? BenchmarkingTime { get; set; } = null;
 
-        public IResizer Resizer { get; private set; }
+        private IResizer _resizer;
+        public IResizer Resizer
+        {
+            get => _resizer.Clone();
+            private set
+            {
+                _resizer = value;
+            }
+        }
+
 
         public ApplicationContext(ILogger<ApplicationContext> logger)
         {
             _logger = logger;
-            Resizer = new EsrganSRFourProcessor("", 1, logger);
+            Resizer = new EsrganSRFourProcessor(@"OnnxModels\ESRGAN_SRx4_DF2KOST_official-ff704c303320.onnx", 1, logger);
         }
     }
 }

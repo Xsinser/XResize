@@ -15,4 +15,10 @@
     <PackageReference Include="SkiaSharp" Version="2.88.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="OnnxModels\ESRGAN_SRx4_DF2KOST_official-ff704c303320.onnx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

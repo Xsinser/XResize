@@ -4,33 +4,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XResize.Bot.Context;
+using XResize.Bot.Enums;
+using XResize.Bot.Interface;
+using XResize.Bot.Job;
+using XResize.Bot.Service;
 using XResize.Bot.Services;
 
 namespace XResize.Bot.Models.Work
 {
-    public class DocumentJob : Job
+    public class LoaderJob : BaseJob, IFastJob
     {
         public BotService BotService { get; private set; }
         public TaskQueueService TaskQueryService { get; private set; }
+        public ApplicationContext ApplicationContext { get; private set; }
+
         public string FileId { get; set; }
         public string FileName { get; set; }
         public string MimeType { get; set; }
         public string UserName { get; set; }
         public string UserId { get; set; }
 
-        public DocumentJob(BotService botService, TaskQueueService taskQueryService)
-        {
-            BotService = botService;
-            TaskQueryService = taskQueryService;
-        }
-
-        public DocumentJob(BotService botService, 
-                           TaskQueueService taskQueryService,
-                           string fileId,
-                           string fileName,
-                           string mimeType,
-                           string userName,
-                           string userId)
+        public LoaderJob(BotService botService, 
+                         TaskQueueService taskQueryService,
+                         ApplicationContext applicationContext,
+                         string fileId,
+                         string fileName,
+                         string mimeType,
+                         string userName,
+                         string userId)
         {
             BotService = botService;
             TaskQueryService = taskQueryService;
@@ -39,12 +40,15 @@ namespace XResize.Bot.Models.Work
             MimeType = mimeType;
             UserName = userName;
             UserId = userId;
+            ApplicationContext = applicationContext;   
         }
 
-        public override async Task Execute(ApplicationContext appContext)
+        public override async Task Execute()
         {
             var document = await BotService.GetDocument(FileId);
-            TaskQueryService.AddNewTask(new ResizeJob(BotService, Enums.BotTypeEnum.Telegram, UserName, UserId, document));
+            TaskQueryService.AddNewTask(new ResizeJob(BotService,  ApplicationContext, BotTypeEnum.Telegram, UserName, UserId, document, FileName));
+
+            JobState = JobStateEnum.Complited;
         }
     }
 }

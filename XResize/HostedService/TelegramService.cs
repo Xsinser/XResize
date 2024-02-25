@@ -5,7 +5,11 @@ using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using XResize.Bot.Context;
+using XResize.Bot.Job;
+using XResize.Bot.Models.Job;
 using XResize.Bot.Models.Work;
+using XResize.Bot.Service;
 using XResize.Bot.Services;
 
 namespace XResize.Bot.HostedServices
@@ -13,12 +17,14 @@ namespace XResize.Bot.HostedServices
     public class TelegramService : BaseService, IHostedService
     {
         private readonly BotService _botService;
-        private readonly TaskQueueService _taskQueryService;
+        private readonly TaskQueueService _taskQueueService;
+        private readonly ApplicationContext _applicationContext;
 
-        public TelegramService(ILogger<TelegramService> logger, BotService botService, TaskQueueService taskQueryService) : base(logger)
+        public TelegramService(ILogger<TelegramService> logger, ApplicationContext applicationContext, BotService botService, TaskQueueService taskQueueService) : base(logger)
         {
             _botService = botService;
-            _taskQueryService = taskQueryService;
+            _taskQueueService = taskQueueService;
+            _applicationContext = applicationContext;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -43,7 +49,7 @@ namespace XResize.Bot.HostedServices
             if (update.Message is not { } message)
                 return;
             // Only process text messages
-            if (string.IsNullOrEmpty(message.Text))
+            if (!string.IsNullOrEmpty(message.Text))
             {
 
                 var chatId = message.Chat.Id;
@@ -56,26 +62,32 @@ namespace XResize.Bot.HostedServices
                         break;
                     case "Бенчмаркинг":
                         {
-                            await _botService.SendMessage(chatId, "Бенчмаркинг", cancellationToken);
+                            _taskQueueService.AddNewTask(new BenchmarkingJob(_botService, _applicationContext, chatId.ToString()));
                         }
                         break;
                     case "Мои задачи":
                         {
-                            await _botService.SendMessage(chatId, "Мои задачи", cancellationToken);
+                            _taskQueueService.AddNewTask(new WaitingTimeJob(_botService, _applicationContext, _taskQueueService, Enums.BotTypeEnum.Telegram, message.From.Username, chatId.ToString()));
                         }
                         break;
                 };
             }
             else
             {
-                _taskQueryService.AddNewTask(new DocumentJob(_botService, 
-                    _taskQueryService, 
-                    message.Document.
-                    FileId, 
-                    message.Document.FileName,
-                    message.Document.MimeType,
-                    message.From.Username, 
-                    message.Chat.Id.ToString()));
+                if (message.Document == null)
+                    _botService.SendMessage(message.Chat.Id.ToString(), "Файл не прикреплен!");
+                else if (message.Document.FileName.Split(".").Last().ToLower() is not "jpg" or "jpeg")
+                    _botService.SendMessage(message.Chat.Id.ToString(), "Поддерживается только jpeg формат");
+                else
+                    _taskQueueService.AddNewTask(new LoaderJob(_botService,
+                        _taskQueueService,
+                        _applicationContext,
+                        message.Document.
+                        FileId,
+                        message.Document.FileName,
+                        message.Document.MimeType,
+                        message.From.Username,
+                        message.Chat.Id.ToString()));
             }
         }
 
