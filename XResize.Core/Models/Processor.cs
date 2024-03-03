@@ -12,8 +12,8 @@ namespace XResize.Models
 
         protected abstract SKBitmap ImagesToFullImage(in SKBitmap[][] bitmaps, int width, int height);
 
-        protected abstract SKBitmap Resizer( SKBitmap bitmap,  InferenceSession session);
+        protected abstract SKBitmap Resizer(SKBitmap bitmap, InferenceSession session);
 
-        protected abstract SKBitmap SaveAsFile( float[] bufer);
+        protected abstract SKBitmap SaveAsFile(float[] bufer);
     }
 }

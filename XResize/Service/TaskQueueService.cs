@@ -1,19 +1,6 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Threading;
-using XResize.Bot.Models.Work;
-
-using XResize.Bot.Job;
+﻿using XResize.Bot.Enums;
 using XResize.Bot.Interface;
-using XResize.Bot.Enums;
+using XResize.Bot.Job;
 
 namespace XResize.Bot.Services
 {
@@ -27,7 +14,6 @@ namespace XResize.Bot.Services
 
         public TaskQueueService()
         {
-
         }
 
         public void AddNewTask(BaseJob task)
@@ -94,7 +80,6 @@ namespace XResize.Bot.Services
             {
                 foreach (var task in _taskQuery.Where(x => x.JobState == JobStateEnum.Complited).ToList())
                     _taskQuery.Remove(task);
-
             }
         }
     }

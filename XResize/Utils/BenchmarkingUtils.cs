@@ -1,17 +1,12 @@
 ﻿using SkiaSharp;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using XResize.Bot.Context;
 
 namespace XResize.Bot.Utils
 {
     public static class BenchmarkingUtils
     {
-        private static SKBitmap _benchmarkingImage = SKBitmap.Decode("64.jpg");
+        private static SKBitmap _benchmarkingImage = SKBitmap.Decode("BenchmarkingTest");
 
         public static async Task<TimeOnly> CalculateBenchmarkingTime(ApplicationContext applicationContext)
         {

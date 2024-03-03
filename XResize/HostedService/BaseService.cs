@@ -1,15 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Telegram.Bot.Exceptions;
-using Telegram.Bot.Polling;
-using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types;
-using Telegram.Bot;
+﻿using Microsoft.Extensions.Logging;
 
 namespace XResize.Bot.HostedServices
 {
@@ -28,8 +17,8 @@ namespace XResize.Bot.HostedServices
         {
             _executingTask = ExecuteAsync(_stoppingCts.Token);
 
-            if (_executingTask.IsCompleted)            
-                return _executingTask;            
+            if (_executingTask.IsCompleted)
+                return _executingTask;
 
             return Task.CompletedTask;
         }

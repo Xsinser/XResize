@@ -1,13 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using SkiaSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
+using XResize.Bot.Context;
 using XResize.Bot.Enums;
 
 namespace XResize.Bot.Service
@@ -22,11 +18,11 @@ namespace XResize.Bot.Service
 
         public BotTypeEnum BotType { get; private set; }
 
-        public BotService(ILogger<BotService> logger)
+        public BotService(ILogger<BotService> logger, ApplicationContext applicationContext)
         {
             BotType = BotTypeEnum.Telegram;
             _logger = logger;
-            _client = new TelegramBotClient("6867996261:AAETOAZCUBV2cBP8C-s26TDz91_Lzqz8cIA");
+            _client = new TelegramBotClient(applicationContext.TelegramToken);
         }
 
         public TelegramBotClient GetClient()
@@ -54,7 +50,7 @@ namespace XResize.Bot.Service
         public async Task<SKBitmap> GetDocument(string fileId)
         {
             await using var stream = new MemoryStream();
-            var fileInfo  = await _client.GetFileAsync(fileId);
+            var fileInfo = await _client.GetFileAsync(fileId);
             await _client.DownloadFileAsync(fileInfo.FilePath!, stream);
             stream.Position = 0;
             return SKBitmap.Decode(stream);

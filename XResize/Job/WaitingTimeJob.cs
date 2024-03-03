@@ -1,13 +1,6 @@
-﻿using SkiaSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using XResize.Bot.Context;
+﻿using XResize.Bot.Context;
 using XResize.Bot.Enums;
 using XResize.Bot.Interface;
-using XResize.Bot.Models.Job;
 using XResize.Bot.Service;
 using XResize.Bot.Services;
 using XResize.Bot.Utils;

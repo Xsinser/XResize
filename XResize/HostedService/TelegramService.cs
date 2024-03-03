@@ -38,20 +38,15 @@ namespace XResize.Bot.HostedServices
                 pollingErrorHandler: HandlePollingErrorAsync,
                 receiverOptions: receiverOptions,
                 cancellationToken: stoppingToken);
-            Console.ReadLine();
-
-            await Task.Delay(10000);
         }
 
-        async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-            // Only process Message updates: https://core.telegram.org/bots/api#message
             if (update.Message is not { } message)
                 return;
-            // Only process text messages
+
             if (!string.IsNullOrEmpty(message.Text))
             {
-
                 var chatId = message.Chat.Id;
                 switch (message.Text)
                 {
@@ -60,11 +55,13 @@ namespace XResize.Bot.HostedServices
                             await _botService.SendMessage(chatId, "Добро пожаловать!", cancellationToken);
                         }
                         break;
+
                     case "Бенчмаркинг":
                         {
                             _taskQueueService.AddNewTask(new BenchmarkingJob(_botService, _applicationContext, chatId.ToString()));
                         }
                         break;
+
                     case "Мои задачи":
                         {
                             _taskQueueService.AddNewTask(new WaitingTimeJob(_botService, _applicationContext, _taskQueueService, Enums.BotTypeEnum.Telegram, message.From.Username, chatId.ToString()));
@@ -91,7 +88,7 @@ namespace XResize.Bot.HostedServices
             }
         }
 
-        Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
+        private Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
             var ErrorMessage = exception switch
             {

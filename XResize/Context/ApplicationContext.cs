@@ -1,12 +1,7 @@
 ﻿using ImResizer.Interfaces;
 using ImResizer.Models.ESRGANSR4;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using XResize.Bot.Services;
 
 namespace XResize.Bot.Context
 {
@@ -17,6 +12,7 @@ namespace XResize.Bot.Context
         public TimeOnly? BenchmarkingTime { get; set; } = null;
 
         private IResizer _resizer;
+
         public IResizer Resizer
         {
             get => _resizer.Clone();
@@ -26,11 +22,14 @@ namespace XResize.Bot.Context
             }
         }
 
+        public string TelegramToken { get; set; }
 
-        public ApplicationContext(ILogger<ApplicationContext> logger)
+        public ApplicationContext(ILogger<ApplicationContext> logger, IConfiguration configuration)
         {
             _logger = logger;
-            Resizer = new EsrganSRFourProcessor(@"OnnxModels\ESRGAN_SRx4_DF2KOST_official-ff704c303320.onnx", 1, logger);
+            TelegramToken = configuration.GetValue<string>("TelegramBotToken")!;
+            logger.LogInformation($"TelegramBotToken: {TelegramToken}");
+            Resizer = new EsrganSRFourProcessor(Path.Combine(System.IO.Directory.GetCurrentDirectory(), Path.Combine("OnnxModels","ESRGAN_SRx4_DF2KOST_official-ff704c303320.onnx")), configuration.GetValue<int>("ResizerThreadCount"), logger);
         }
     }
 }

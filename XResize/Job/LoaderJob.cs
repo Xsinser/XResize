@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using XResize.Bot.Context;
+﻿using XResize.Bot.Context;
 using XResize.Bot.Enums;
 using XResize.Bot.Interface;
 using XResize.Bot.Job;
@@ -24,7 +19,7 @@ namespace XResize.Bot.Models.Work
         public string UserName { get; set; }
         public string UserId { get; set; }
 
-        public LoaderJob(BotService botService, 
+        public LoaderJob(BotService botService,
                          TaskQueueService taskQueryService,
                          ApplicationContext applicationContext,
                          string fileId,
@@ -40,13 +35,13 @@ namespace XResize.Bot.Models.Work
             MimeType = mimeType;
             UserName = userName;
             UserId = userId;
-            ApplicationContext = applicationContext;   
+            ApplicationContext = applicationContext;
         }
 
         public override async Task Execute()
         {
             var document = await BotService.GetDocument(FileId);
-            TaskQueryService.AddNewTask(new ResizeJob(BotService,  ApplicationContext, BotTypeEnum.Telegram, UserName, UserId, document, FileName));
+            TaskQueryService.AddNewTask(new ResizeJob(BotService, ApplicationContext, BotTypeEnum.Telegram, UserName, UserId, document, FileName));
 
             JobState = JobStateEnum.Complited;
         }

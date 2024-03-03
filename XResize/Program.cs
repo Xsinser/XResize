@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.IO;
 using XResize.Bot.Context;
 using XResize.Bot.HostedService;
 using XResize.Bot.HostedServices;
@@ -13,7 +15,13 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
-        var host = Host.CreateDefaultBuilder().ConfigureServices(services =>
+        var builder = Host.CreateDefaultBuilder();
+        builder.ConfigureAppConfiguration(configBuilder =>
+        {
+            configBuilder.AddJsonFile("appsettings.json");
+            configBuilder.AddEnvironmentVariables();
+        });
+        var host = builder.ConfigureServices(services =>
         {
             services.AddLogging();
             services.AddSingleton<TaskQueueService, TaskQueueService>();
