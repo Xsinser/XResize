@@ -46,7 +46,7 @@ namespace XResize.Bot.Job
 
             for (int i = 0; i < waitingTimes.Count; i++)
             {
-                await BotService.SendMessage(UserId, $"Время ожидания задачи {i + 1} {(ApplicationContext.BenchmarkingTime?.ToTimeSpan().TotalSeconds * waitingTimes[i])} секунд");
+                await BotService.SendMessage(UserId, $"Время ожидания задачи {i + 1} {Math.Round(((decimal)(ApplicationContext.BenchmarkingTime?.ToTimeSpan().TotalSeconds * waitingTimes[i])) / 60, 2)} минут");
             }
             JobState = JobStateEnum.Complited;
         }

@@ -1,4 +1,5 @@
 ﻿using SkiaSharp;
+using System.Diagnostics;
 using XResize.Bot.Context;
 using XResize.Bot.Enums;
 using XResize.Bot.Interface;
@@ -32,9 +33,17 @@ namespace XResize.Bot.Job
 
         public override async Task Execute()
         {
+            var stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+
             var result = await ApplicationContext.Resizer.Resize(UserImage);
             var stream = SKImage.FromPixels(result.PeekPixels()).Encode().AsStream();
             await BotService.SendDocument(UserId, stream, FileName);
+
+            stopwatch.Stop();
+
+            ApplicationContext.BenchmarkingTime = new TimeOnly(stopwatch.Elapsed.Ticks / ImagePartsCount);
 
             JobState = JobStateEnum.Complited;
         }
