@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.IO;
 using XResize.Bot.Context;
 using XResize.Bot.HostedService;
 using XResize.Bot.HostedServices;
