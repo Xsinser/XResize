@@ -13,6 +13,7 @@ namespace XResize.Bot.HostedService
                                  TaskQueueService taskQueryService) : base(logger)
         {
             _taskQueryService = taskQueryService;
+            logger.LogInformation("WorkerService has been started");
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)

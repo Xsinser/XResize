@@ -19,12 +19,19 @@ namespace XResize.Bot.HostedServices
         private readonly BotService _botService;
         private readonly TaskQueueService _taskQueueService;
         private readonly ApplicationContext _applicationContext;
+        private readonly ILogger _logger;
 
-        public TelegramService(ILogger<TelegramService> logger, ApplicationContext applicationContext, BotService botService, TaskQueueService taskQueueService) : base(logger)
+        public TelegramService(ILogger<TelegramService> logger, 
+                               ApplicationContext applicationContext,
+                               BotService botService, 
+                               TaskQueueService taskQueueService) : base(logger)
         {
             _botService = botService;
             _taskQueueService = taskQueueService;
             _applicationContext = applicationContext;
+            _logger = logger;
+
+            logger.LogInformation("TelegramService has been started");
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -35,9 +42,10 @@ namespace XResize.Bot.HostedServices
                 AllowedUpdates = Array.Empty<UpdateType>()
             };
             client.StartReceiving(updateHandler: HandleUpdateAsync,
-                pollingErrorHandler: HandlePollingErrorAsync,
-                receiverOptions: receiverOptions,
-                cancellationToken: stoppingToken);
+                                  pollingErrorHandler: HandlePollingErrorAsync,
+                                  receiverOptions: receiverOptions,
+                                  cancellationToken: stoppingToken);
+            _logger.LogInformation("Client has been started");
         }
 
         private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
@@ -45,9 +53,12 @@ namespace XResize.Bot.HostedServices
             if (update.Message is not { } message)
                 return;
 
+            var chatId = message.Chat.Id;
+
+            _logger.LogInformation($"{chatId} send message");
+
             if (!string.IsNullOrEmpty(message.Text))
             {
-                var chatId = message.Chat.Id;
                 switch (message.Text)
                 {
                     case "/start":
@@ -97,7 +108,7 @@ namespace XResize.Bot.HostedServices
                 _ => exception.ToString()
             };
 
-            Console.WriteLine(ErrorMessage);
+            _logger.LogError(ErrorMessage);
             return Task.CompletedTask;
         }
     }

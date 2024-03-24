@@ -39,22 +39,14 @@ namespace ImResizer.Models.ESRGANSR4
         {
             this._models = new InferenceSession[_maxTaskCount];
 
-            for (int i = 0; i < _maxTaskCount; i++)
-            {
+            for (int i = 0; i < _maxTaskCount; i++)            
                 this._models[i] = new InferenceSession(ModelPath);
-            }
+            
         }
 
         protected override void ImageToSmallImages(int numberElementByHeight, int numberElementByWidth, SKBitmap image, out SKBitmap[][] bitmaps)
         {
             bitmaps = new SKBitmap[numberElementByHeight][];
-
-            int arrayCoef = 0;
-            if (numberElementByHeight == numberElementByWidth ||
-                numberElementByWidth > numberElementByHeight)
-                arrayCoef = numberElementByHeight;
-            else
-                arrayCoef = numberElementByWidth;
 
             for (int height = 0; height < bitmaps.Length; height++)
             {
@@ -64,7 +56,6 @@ namespace ImResizer.Models.ESRGANSR4
             }
 
             for (var w = 0; w < image.Width; w++)
-            {
                 for (var h = 0; h < image.Height; h++)
                 {
                     var currentH = h == 0 ? 0 : h;
@@ -78,7 +69,6 @@ namespace ImResizer.Models.ESRGANSR4
 
                     bitmaps[elementHeightNumber][elementWidthNumber].SetPixel(currentElementPixelW, currentElementPixelH, image.GetPixel(w, h));
                 }
-            }
         }
 
         protected override SKBitmap ImagesToFullImage(in SKBitmap[][] bitmaps, int width, int height)
@@ -128,10 +118,7 @@ namespace ImResizer.Models.ESRGANSR4
 
         protected override SKBitmap Resizer(SKBitmap bitmap, InferenceSession session)
         {
-            var pixels = new int[InputArraySize];
-
             Tensor<float> input = new DenseTensor<float>(new[] { 1, CountChannels, InputWidth, InputHeight });
-            Tensor<float> output = new DenseTensor<float>(new[] { 1, CountChannels, OutputWidth, OutputHeight });
 
             for (var i = 0; i < bitmap.Width; i++)
                 for (var j = 0; j < bitmap.Height; j++)
@@ -186,7 +173,7 @@ namespace ImResizer.Models.ESRGANSR4
             {
                 IsResize = true;
 
-                _logger.LogInformation("Start resize image");
+                _logger?.LogInformation("Start resize image");
 
                 int numberElementByWidth = (image.Width % InputWidth) > 0 ? (image.Width / InputWidth + 1) : (image.Width / InputWidth);
                 int numberElementByHeight = (image.Height % InputHeight) > 0 ? (image.Height / InputHeight + 1) : (image.Height / InputHeight);

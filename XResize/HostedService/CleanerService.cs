@@ -12,6 +12,7 @@ namespace XResize.Bot.HostedServices
                               TaskQueueService taskQueryService) : base(logger)
         {
             this.taskQueryService = taskQueryService;
+            logger.LogInformation("CleanerService has been started");
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
