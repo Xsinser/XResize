@@ -1,8 +1,11 @@
-﻿using XResize.Bot.Context;
+﻿using Marbas.Enums;
+using Marbas.Interface;
+using Marbas.Job;
+using Marbas.Services;
+using XResize.Bot.Context;
 using XResize.Bot.Enums;
 using XResize.Bot.Interface;
 using XResize.Bot.Service;
-using XResize.Bot.Services;
 using XResize.Bot.Utils;
 
 namespace XResize.Bot.Job
@@ -35,12 +38,15 @@ namespace XResize.Bot.Job
 
             List<int> waitingTimes = new();
             int partsCount = 0;
-            var tasks = TaskQueryService.GetSlowTasks(BotService.BotType);
+            var jobs = TaskQueryService.GetJobs<ISlowJob>()
+                .Where(x => x is IResizeJob && ((IResizeJob)x).Type == BotService.BotType)
+                .Select(x=> x as IResizeJob)
+                .ToList();
 
-            foreach (var task in tasks)
+            foreach (var job in jobs)
             {
-                partsCount += task.ImagePartsCount;
-                if (task.UserId == UserId)
+                partsCount += job.ImagePartsCount;
+                if (job.UserId == UserId)
                     waitingTimes.Add(partsCount);
             }
 

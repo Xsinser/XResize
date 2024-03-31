@@ -1,4 +1,7 @@
-﻿using SkiaSharp;
+﻿using Marbas.Enums;
+using Marbas.Interface;
+using Marbas.Job;
+using SkiaSharp;
 using System.Diagnostics;
 using XResize.Bot.Context;
 using XResize.Bot.Enums;
@@ -7,7 +10,7 @@ using XResize.Bot.Service;
 
 namespace XResize.Bot.Job
 {
-    public class ResizeJob : BaseJob, ISlowJob
+    public class ResizeJob : BaseJob, ISlowJob, IResizeJob
     {
         public BotTypeEnum Type { get; set; }
         public string FileName { get; set; }

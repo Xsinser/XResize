@@ -1,4 +1,4 @@
-﻿namespace XResize.Bot.Enums
+﻿namespace Marbas.Enums
 {
     public enum JobStateEnum
     {

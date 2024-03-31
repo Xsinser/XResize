@@ -1,9 +1,11 @@
-﻿using XResize.Bot.Context;
+﻿using Marbas.Enums;
+using Marbas.Interface;
+using Marbas.Job;
+using Marbas.Services;
+using XResize.Bot.Context;
 using XResize.Bot.Enums;
-using XResize.Bot.Interface;
 using XResize.Bot.Job;
 using XResize.Bot.Service;
-using XResize.Bot.Services;
 
 namespace XResize.Bot.Models.Work
 {
@@ -41,7 +43,7 @@ namespace XResize.Bot.Models.Work
         public override async Task Execute()
         {
             var document = await BotService.GetDocument(FileId);
-            TaskQueryService.AddNewTask(new ResizeJob(BotService, ApplicationContext, BotTypeEnum.Telegram, UserName, UserId, document, FileName));
+            TaskQueryService.AddNewJob(new ResizeJob(BotService, ApplicationContext, BotTypeEnum.Telegram, UserName, UserId, document, FileName));
 
             JobState = JobStateEnum.Complited;
         }

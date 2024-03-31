@@ -1,7 +1,7 @@
-﻿using XResize.Bot.Context;
-using XResize.Bot.Enums;
-using XResize.Bot.Interface;
-using XResize.Bot.Job;
+﻿using Marbas.Enums;
+using Marbas.Interface;
+using Marbas.Job;
+using XResize.Bot.Context;
 using XResize.Bot.Service;
 using XResize.Bot.Utils;
 

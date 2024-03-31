@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Marbas.HostedServices;
+using Marbas.Services;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
@@ -10,7 +12,6 @@ using XResize.Bot.Job;
 using XResize.Bot.Models.Job;
 using XResize.Bot.Models.Work;
 using XResize.Bot.Service;
-using XResize.Bot.Services;
 
 namespace XResize.Bot.HostedServices
 {
@@ -69,13 +70,13 @@ namespace XResize.Bot.HostedServices
 
                     case "Бенчмаркинг":
                         {
-                            _taskQueueService.AddNewTask(new BenchmarkingJob(_botService, _applicationContext, chatId.ToString()));
+                            _taskQueueService.AddNewJob(new BenchmarkingJob(_botService, _applicationContext, chatId.ToString()));
                         }
                         break;
 
                     case "Мои задачи":
                         {
-                            _taskQueueService.AddNewTask(new WaitingTimeJob(_botService, _applicationContext, _taskQueueService, Enums.BotTypeEnum.Telegram, message.From.Username, chatId.ToString()));
+                            _taskQueueService.AddNewJob(new WaitingTimeJob(_botService, _applicationContext, _taskQueueService, Enums.BotTypeEnum.Telegram, message.From.Username, chatId.ToString()));
                         }
                         break;
                 };
@@ -87,7 +88,7 @@ namespace XResize.Bot.HostedServices
                 else if (message.Document.FileName.Split(".").Last().ToLower() is not "jpg" or "jpeg")
                     _botService.SendMessage(message.Chat.Id.ToString(), "Поддерживается только jpeg формат");
                 else
-                    _taskQueueService.AddNewTask(new LoaderJob(_botService,
+                    _taskQueueService.AddNewJob(new LoaderJob(_botService,
                         _taskQueueService,
                         _applicationContext,
                         message.Document.

@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Marbas.Services;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using XResize.Bot.Services;
 
-namespace XResize.Bot.HostedServices
+namespace Marbas.HostedServices
 {
     public class CleanerService : BaseService, IHostedService
     {
@@ -19,7 +19,7 @@ namespace XResize.Bot.HostedServices
         {
             while (true)
             {
-                taskQueryService.RemoveComplitedTask();
+                taskQueryService.RemoveComplitedJob();
 
                 await Task.Delay(100000);
             }

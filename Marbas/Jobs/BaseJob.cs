@@ -1,8 +1,9 @@
-﻿using XResize.Bot.Enums;
+﻿using Marbas.Enums;
+using Marbas.Interfaces;
 
-namespace XResize.Bot.Job
+namespace Marbas.Job
 {
-    public abstract class BaseJob
+    public abstract class BaseJob: IJob
     {
         public JobStateEnum JobState { get; set; }
 

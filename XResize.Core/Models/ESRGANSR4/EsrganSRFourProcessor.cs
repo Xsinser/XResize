@@ -39,9 +39,9 @@ namespace ImResizer.Models.ESRGANSR4
         {
             this._models = new InferenceSession[_maxTaskCount];
 
-            for (int i = 0; i < _maxTaskCount; i++)            
+            for (int i = 0; i < _maxTaskCount; i++)
                 this._models[i] = new InferenceSession(ModelPath);
-            
+
         }
 
         protected override void ImageToSmallImages(int numberElementByHeight, int numberElementByWidth, SKBitmap image, out SKBitmap[][] bitmaps)

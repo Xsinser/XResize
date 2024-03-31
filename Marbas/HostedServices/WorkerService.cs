@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Marbas.HostedServices;
+using Marbas.Services;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using XResize.Bot.HostedServices;
-using XResize.Bot.Services;
 
-namespace XResize.Bot.HostedService
+namespace Marbas.HostedService
 {
-    internal class WorkerService<WorketRype> : BaseService, IHostedService
+    public class WorkerService<WorketRype> : BaseService, IHostedService
     {
         protected readonly TaskQueueService _taskQueryService;
 
@@ -20,7 +20,7 @@ namespace XResize.Bot.HostedService
         {
             while (true)
             {
-                var result = _taskQueryService.TryGetUncomplitedTask(out var task, typeof(WorketRype));
+                var result = _taskQueryService.TryGetUncomplitedJob(out var task, typeof(WorketRype));
 
                 if (result)
                     await task!.Execute();

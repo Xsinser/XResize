@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace XResize.Bot.HostedServices
+namespace Marbas.HostedServices
 {
     public abstract class BaseService : IDisposable
     {

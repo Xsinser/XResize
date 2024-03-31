@@ -26,7 +26,7 @@ namespace XResize.Bot.Context
 
         public ApplicationContext(ILogger<ApplicationContext> logger, IConfiguration configuration)
         {
-        Logger = logger;
+            Logger = logger;
             TelegramToken = configuration.GetValue<string>("TelegramBotToken")!;
             logger.LogInformation($"TelegramBotToken: {TelegramToken}");
             Resizer = new EsrganSRFourProcessor(Path.Combine(System.IO.Directory.GetCurrentDirectory(), Path.Combine("OnnxModels", "ESRGAN_SRx4_DF2KOST_official-ff704c303320.onnx")), configuration.GetValue<int>("ResizerThreadCount"), logger);

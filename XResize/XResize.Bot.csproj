@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Marbas\Marbas.csproj" />
     <ProjectReference Include="..\XResize.Core\XResize.Core.csproj" />
   </ItemGroup>
 
