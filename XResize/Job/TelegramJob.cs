@@ -9,20 +9,20 @@ using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using XResize.Bot.Context;
-using XResize.Bot.Job;
 using XResize.Bot.Models.Job;
 using XResize.Bot.Models.Work;
+using XResize.Bot.Service;
 
-namespace XResize.Bot.Service
+namespace XResize.Bot.Job
 {
-    public class TelegramService : BaseJob
+    public class TelegramJob : BaseJob
     {
         private readonly BotService _botService;
         private readonly JobQueueService _taskQueueService;
         private readonly ApplicationContext _applicationContext;
         private readonly ILogger _logger;
 
-        public TelegramService(ILogger<TelegramService> logger,
+        public TelegramJob(ILogger<TelegramJob> logger,
                                ApplicationContext applicationContext,
                                BotService botService,
                                JobQueueService taskQueueService) : base()
