@@ -12,7 +12,7 @@ namespace XResize.Bot.Models.Work
     public class LoaderJob : BaseJob, IFastJob
     {
         public BotService BotService { get; private set; }
-        public TaskQueueService TaskQueryService { get; private set; }
+        public JobQueueService TaskQueryService { get; private set; }
         public ApplicationContext ApplicationContext { get; private set; }
 
         public string FileId { get; set; }
@@ -22,7 +22,7 @@ namespace XResize.Bot.Models.Work
         public string UserId { get; set; }
 
         public LoaderJob(BotService botService,
-                         TaskQueueService taskQueryService,
+                         JobQueueService taskQueryService,
                          ApplicationContext applicationContext,
                          string fileId,
                          string fileName,

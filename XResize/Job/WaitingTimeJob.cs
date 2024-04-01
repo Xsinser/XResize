@@ -16,10 +16,10 @@ namespace XResize.Bot.Job
         public string UserName { get; set; }
         public string UserId { get; set; }
         public BotService BotService { get; private set; }
-        public TaskQueueService TaskQueryService { get; private set; }
+        public JobQueueService TaskQueryService { get; private set; }
         public ApplicationContext ApplicationContext { get; private set; }
 
-        public WaitingTimeJob(BotService botService, ApplicationContext applicationContext, TaskQueueService taskQueryService, BotTypeEnum botTypeEnum, string username, string userId)
+        public WaitingTimeJob(BotService botService, ApplicationContext applicationContext, JobQueueService taskQueryService, BotTypeEnum botTypeEnum, string username, string userId)
         {
             BotService = botService;
             TaskQueryService = taskQueryService;

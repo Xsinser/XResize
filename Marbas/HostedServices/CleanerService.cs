@@ -6,10 +6,10 @@ namespace Marbas.HostedServices
 {
     public class CleanerService : BaseService, IHostedService
     {
-        protected readonly TaskQueueService taskQueryService;
+        protected readonly JobQueueService taskQueryService;
 
         public CleanerService(ILogger<CleanerService> logger,
-                              TaskQueueService taskQueryService) : base(logger)
+                              JobQueueService taskQueryService) : base(logger)
         {
             this.taskQueryService = taskQueryService;
             logger.LogInformation("CleanerService has been started");

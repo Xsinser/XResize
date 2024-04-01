@@ -1,5 +1,4 @@
 ﻿using Marbas.Enums;
-using Marbas.Interface;
 using Marbas.Interfaces;
 using Marbas.Job;
 
@@ -8,12 +7,12 @@ namespace Marbas.Services
     /// <summary>
     /// Single
     /// </summary>
-    public class TaskQueueService
+    public class JobQueueService
     {
         private SynchronizedCollection<BaseJob> _jobQuery = new();
         private readonly object _locker = new();
 
-        public TaskQueueService()
+        public JobQueueService()
         {
         }
 

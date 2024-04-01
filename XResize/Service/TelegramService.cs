@@ -1,4 +1,5 @@
 ﻿using Marbas.HostedServices;
+using Marbas.Job;
 using Marbas.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -11,21 +12,20 @@ using XResize.Bot.Context;
 using XResize.Bot.Job;
 using XResize.Bot.Models.Job;
 using XResize.Bot.Models.Work;
-using XResize.Bot.Service;
 
-namespace XResize.Bot.HostedServices
+namespace XResize.Bot.Service
 {
-    public class TelegramService : BaseService, IHostedService
+    public class TelegramService : BaseJob
     {
         private readonly BotService _botService;
-        private readonly TaskQueueService _taskQueueService;
+        private readonly JobQueueService _taskQueueService;
         private readonly ApplicationContext _applicationContext;
         private readonly ILogger _logger;
 
-        public TelegramService(ILogger<TelegramService> logger, 
+        public TelegramService(ILogger<TelegramService> logger,
                                ApplicationContext applicationContext,
-                               BotService botService, 
-                               TaskQueueService taskQueueService) : base(logger)
+                               BotService botService,
+                               JobQueueService taskQueueService) : base()
         {
             _botService = botService;
             _taskQueueService = taskQueueService;
@@ -35,7 +35,7 @@ namespace XResize.Bot.HostedServices
             logger.LogInformation("TelegramService has been started");
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        public override async Task Execute()
         {
             var client = _botService.GetClient();
             ReceiverOptions receiverOptions = new()
@@ -44,9 +44,9 @@ namespace XResize.Bot.HostedServices
             };
             client.StartReceiving(updateHandler: HandleUpdateAsync,
                                   pollingErrorHandler: HandlePollingErrorAsync,
-                                  receiverOptions: receiverOptions,
-                                  cancellationToken: stoppingToken);
+                                  receiverOptions: receiverOptions);
             _logger.LogInformation("Client has been started");
+            JobState = Marbas.Enums.JobStateEnum.InProgress;
         }
 
         private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
@@ -110,6 +110,7 @@ namespace XResize.Bot.HostedServices
             };
 
             _logger.LogError(ErrorMessage);
+            JobState = Marbas.Enums.JobStateEnum.Complited;
             return Task.CompletedTask;
         }
     }
