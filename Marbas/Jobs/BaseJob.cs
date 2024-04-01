@@ -3,7 +3,7 @@ using Marbas.Interfaces;
 
 namespace Marbas.Job
 {
-    public abstract class BaseJob: IJob
+    public abstract class BaseJob : IJob
     {
         public JobStateEnum JobState { get; set; }
 

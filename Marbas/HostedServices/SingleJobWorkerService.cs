@@ -1,14 +1,7 @@
 ﻿using Marbas.HostedService;
-using Marbas.Interfaces;
 using Marbas.Job;
-using Marbas.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Marbas.HostedServices
 {

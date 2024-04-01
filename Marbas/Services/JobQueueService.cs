@@ -63,7 +63,7 @@ namespace Marbas.Services
             }
         }
 
-        public IEnumerable<BaseJob> GetJobs<T>()  where T : IJob
+        public IEnumerable<BaseJob> GetJobs<T>() where T : IJob
         {
             lock (_locker)
             {

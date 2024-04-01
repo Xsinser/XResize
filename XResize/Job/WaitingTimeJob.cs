@@ -40,7 +40,7 @@ namespace XResize.Bot.Job
             int partsCount = 0;
             var jobs = TaskQueryService.GetJobs<ISlowJob>()
                 .Where(x => x is IResizeJob && ((IResizeJob)x).Type == BotService.BotType)
-                .Select(x=> x as IResizeJob)
+                .Select(x => x as IResizeJob)
                 .ToList();
 
             foreach (var job in jobs)
