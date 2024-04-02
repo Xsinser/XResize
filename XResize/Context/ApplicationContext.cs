@@ -1,4 +1,7 @@
-﻿using ImResizer.Interfaces;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
+using ImResizer.Interfaces;
 using ImResizer.Models.ESRGANSR4;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
